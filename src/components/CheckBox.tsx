@@ -8,7 +8,6 @@ type PropsType = {
 
 const CheckBox = (props:PropsType) => {
     const onChangeCheckboxHandler = (e:ChangeEvent<HTMLInputElement>) => {
-        console.log(e.currentTarget.checked)
         props.callBack(e.currentTarget.checked)
     }
     return (

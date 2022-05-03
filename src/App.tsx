@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
-
+import {AddItemForm} from './components/AddItemForm';
 
 
 export  type FilterPropsType = 'All' | 'Active' | 'Completed'
@@ -44,45 +44,63 @@ function App() {
     })
 
 
-    const removeTask = (newId: string, toDoListID:string) => {
-        setTasks({...tasks, [toDoListID]: tasks[toDoListID].filter((t)=> t.id !== newId)})
+    const removeTask = (newId: string, toDoListID: string) => {
+        setTasks({...tasks, [toDoListID]: tasks[toDoListID].filter((t) => t.id !== newId)})
     }
 
-    const addTask = (title: string, toDoListID:string) => {
+    const addTask = (title: string, toDoListID: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
-        setTasks({...tasks, [toDoListID]:[newTask, ...tasks[toDoListID]]})
+        setTasks({...tasks, [toDoListID]: [newTask, ...tasks[toDoListID]]})
     }
 
-    const changeStatus = (taskId: string, isDone: boolean, toDoListID:string) => {
+    const changeStatus = (taskId: string, isDone: boolean, toDoListID: string) => {
         const tasksForCurrentTodoList = tasks[toDoListID]
-        const upDatedTask = tasksForCurrentTodoList.map((t)=> t.id === taskId ?{...t, isDone:isDone} :t)
+        const upDatedTask = tasksForCurrentTodoList.map((t) => t.id === taskId ? {...t, isDone: isDone} : t)
         const copyTasks = {...tasks}
-        copyTasks[toDoListID]  = upDatedTask
+        copyTasks[toDoListID] = upDatedTask
         setTasks(copyTasks)
     }
 
-    const changeFilter = (filter:FilterPropsType, todoListID:string) => {
-        setTodoLists(todoLists.map((tl)=> tl.id === todoListID ?{...tl, filter:filter} :tl))
+    const changeTitle = (taskId: string, newTitle: string, toDoListID: string) => {
+        setTasks({...tasks,[toDoListID]:tasks[toDoListID].map(el=>el.id === taskId ?{...el, title:newTitle} : el)})
+    }
+    const changeTodoListTitle = (title:string,todoListID:string ) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListID ? {...tl, title: title} : tl))
     }
 
-    const removeTodoList = (todoListID:string) => {
-        setTodoLists(todoLists.filter((tl)=> tl.id !== todoListID ))
+    const changeFilter = (filter: FilterPropsType, todoListID: string) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListID ? {...tl, filter: filter} : tl))
+    }
+
+    const removeTodoList = (todoListID: string) => {
+        setTodoLists(todoLists.filter((tl) => tl.id !== todoListID))
         delete tasks[todoListID]
+    }
+
+    const addTodoList = (title: string) => {
+        let newTodoListID = v1()
+        const newTodoList: TodoListType = {
+            id: newTodoListID,
+            title: title,
+            filter: 'All'
+        }
+        setTodoLists([...todoLists, newTodoList])
+        setTasks({...tasks, [newTodoListID]: []})
     }
     //BLL
 
     //UI:
 
-    const todoListsForRender = todoLists.map(tl=> {
+    const todoListsForRender = todoLists.map(tl => {
         let tasksForTodoList = tasks[tl.id]
 
         if (tl.filter === 'Active') {
-            tasksForTodoList = tasksForTodoList.filter(t=> !t.isDone)
+            tasksForTodoList = tasksForTodoList.filter(t => !t.isDone)
             console.log(tasksForTodoList, 'hello')
         }
 
         if (tl.filter === 'Completed') {
-            tasksForTodoList = tasksForTodoList.filter(t=> t.isDone)
+            tasksForTodoList = tasksForTodoList.filter(t => t.isDone)
         }
 
         return (
@@ -91,17 +109,19 @@ function App() {
                       title={tl.title}
                       filter={tl.filter}
                       tasks={tasksForTodoList}
-
                       removeTask={removeTask}
                       addTask={addTask}
                       changeFilter={changeFilter}
+                      changeTodoListTitle={changeTodoListTitle}
                       changeStatus={changeStatus}
-                      removeTodoList={removeTodoList} />
+                      changeTitle={changeTitle}
+                      removeTodoList={removeTodoList}/>
         )
     })
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
             {todoListsForRender}
         </div>
     );
