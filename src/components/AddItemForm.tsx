@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import c from '../Todolist.module.css';
+import {Button, TextField} from '@material-ui/core';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -32,11 +33,13 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
     }
     return (
         <div>
-            <input value={newTitle}
-                   onChange={onChangeInputHandler}
-                   onKeyPress={onKeyPressInputHandler}
-                   className={error ? c.error : ''}/>
-            <button onClick={onClickAddItem}>+</button>
+            <TextField value={newTitle}
+                       onChange={onChangeInputHandler}
+                       onKeyPress={onKeyPressInputHandler}
+                       color={error ? 'secondary' : 'primary'}
+                       error={!!error}
+            />
+            <Button variant={'contained'} color={'primary'} onClick={onClickAddItem}>+</Button>
             {error &&
                 <div className={c.errorMessage}>{error}</div>}
         </div>

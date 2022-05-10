@@ -1,17 +1,18 @@
 import React, {ChangeEvent} from 'react';
+import {Checkbox} from '@material-ui/core';
 
 type PropsType = {
-    isDone:boolean
-    callBack: (isDone:boolean, )=>void
+    checked:boolean
+    onChange: (isDone:boolean, )=>void
 }
 
 
 const CheckBox = (props:PropsType) => {
     const onChangeCheckboxHandler = (e:ChangeEvent<HTMLInputElement>) => {
-        props.callBack(e.currentTarget.checked)
+        props.onChange(e.currentTarget.checked)
     }
     return (
-        <input type="checkbox" onChange={onChangeCheckboxHandler} checked={props.isDone} />
+        <Checkbox onChange={onChangeCheckboxHandler} checked={props.checked} />
     );
 };
 
