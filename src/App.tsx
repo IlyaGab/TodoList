@@ -49,12 +49,10 @@ function App() {
     const removeTask = (newId: string, toDoListID: string) => {
         setTasks({...tasks, [toDoListID]: tasks[toDoListID].filter((t) => t.id !== newId)})
     }
-
     const addTask = (title: string, toDoListID: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
         setTasks({...tasks, [toDoListID]: [newTask, ...tasks[toDoListID]]})
     }
-
     const changeStatus = (taskId: string, isDone: boolean, toDoListID: string) => {
         const tasksForCurrentTodoList = tasks[toDoListID]
         const upDatedTask = tasksForCurrentTodoList.map((t) => t.id === taskId ? {...t, isDone: isDone} : t)
@@ -62,26 +60,24 @@ function App() {
         copyTasks[toDoListID] = upDatedTask
         setTasks(copyTasks)
     }
-
     const changeTitle = (taskId: string, newTitle: string, toDoListID: string) => {
         setTasks({
             ...tasks,
             [toDoListID]: tasks[toDoListID].map(el => el.id === taskId ? {...el, title: newTitle} : el)
         })
     }
-    const changeTodoListTitle = (title: string, todoListID: string) => {
-        setTodoLists(todoLists.map((tl) => tl.id === todoListID ? {...tl, title: title} : tl))
-    }
+
 
     const changeFilter = (filter: FilterPropsType, todoListID: string) => {
         setTodoLists(todoLists.map((tl) => tl.id === todoListID ? {...tl, filter: filter} : tl))
     }
-
+    const changeTodoListTitle = (title: string, todoListID: string) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListID ? {...tl, title: title} : tl))
+    }
     const removeTodoList = (todoListID: string) => {
         setTodoLists(todoLists.filter((tl) => tl.id !== todoListID))
         delete tasks[todoListID]
     }
-
     const addTodoList = (title: string) => {
         let newTodoListID = v1()
         const newTodoList: TodoListType = {
@@ -89,7 +85,7 @@ function App() {
             title: title,
             filter: 'All'
         }
-        setTodoLists([...todoLists, newTodoList])
+        setTodoLists([newTodoList, ...todoLists ])
         setTasks({...tasks, [newTodoListID]: []})
     }
     //BLL
