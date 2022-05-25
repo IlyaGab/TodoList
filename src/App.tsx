@@ -25,8 +25,7 @@ function App() {
     const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
             {id: toDoListID_1, title: 'What to learn', filter: 'All'},
             {id: toDoListID_2, title: 'What to buy', filter: 'All'},
-        ]
-    )
+        ])
 
     const [tasks, setTasks] = useState<TaskStateType>({
         [toDoListID_1]:
@@ -54,11 +53,7 @@ function App() {
         setTasks({...tasks, [toDoListID]: [newTask, ...tasks[toDoListID]]})
     }
     const changeStatus = (taskId: string, isDone: boolean, toDoListID: string) => {
-        const tasksForCurrentTodoList = tasks[toDoListID]
-        const upDatedTask = tasksForCurrentTodoList.map((t) => t.id === taskId ? {...t, isDone: isDone} : t)
-        const copyTasks = {...tasks}
-        copyTasks[toDoListID] = upDatedTask
-        setTasks(copyTasks)
+        setTasks({...tasks, [toDoListID]: tasks[toDoListID].map((t) => t.id === taskId ? {...t, isDone: isDone} : t)})
     }
     const changeTitle = (taskId: string, newTitle: string, toDoListID: string) => {
         setTasks({
